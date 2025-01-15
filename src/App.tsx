@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
-import { LandingPage } from './LandingPage';
+import { LandingPage } from './pages/LandingPage';
 import { Box } from '@chakra-ui/react';
 
 function App() {
