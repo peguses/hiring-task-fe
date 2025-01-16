@@ -19,14 +19,18 @@ import { Feedback } from "../context/FeedbackContextProvider";
 import { useEffect } from "react";
 
 export const FeedbackDialog = () => {
+
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<Feedback>();
 
   const { submit, fulfilled, rejected } = useFeedback();
+
+  const comment  = watch("comment", "")
 
   useEffect(() => {
     if (fulfilled && !rejected) {
@@ -88,8 +92,10 @@ export const FeedbackDialog = () => {
                     invalid={!!errors.comment}
                     errorText={errors.comment?.message}
                     required
+                    helperText={`Max ${comment.length}/1000 characters.`}
                   >
                     <Textarea
+                      maxLength={1000}
                       {...register("comment", {
                         required: "Comment is required",
                       })}
