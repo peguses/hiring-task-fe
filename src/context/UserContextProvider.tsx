@@ -1,35 +1,20 @@
 import { createContext, ReactNode, useState } from "react";
-
-export enum Actions {
-  CREATE = "CREATE",
-  UPDATE = "UPDATE",
-  VIEW = "VIEW",
-  DELETE = "DELETE",
-  MANAGE = "MANAGE",
-}
-
-export interface Permission {
-  subject: string;
-  actions: [Actions];
-}
-
-export interface Role {
-  name: string;
-  role: string;
-  permissions: [Permission];
-}
+import { requestLogin } from "../services/user.service";
 
 export interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  authProvider: string;
-  role: Role;
+  name: string;
+  password: string;
+  isAdmin?: boolean;
+  token?: string;
 }
 
 export interface UserContextType {
   user: User | null;
-  login: (user: User) => void;
+  rejected?: boolean;
+  pending?: boolean;
+  fulfilled?: boolean;
+  error?: string;
+  submitLogin: (user: User) => void;
   logout: () => void;
 }
 
@@ -40,10 +25,38 @@ export interface UserProviderProps {
 }
 
 export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) => {
+
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (newUser: User) => {
-    setUser(newUser);
+  const [pending, setPending] = useState<boolean>(false);
+
+  const [fulfilled, setFulfilled] = useState<boolean>(false);
+
+  const [rejected, setRejected] = useState<boolean>(false);
+
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  const submitLogin = async (data: User) => {
+    
+    setPending(true);
+    setFulfilled(false);
+    setRejected(false);
+    setError(undefined);
+
+    try {
+      const response = await requestLogin(data);
+      setUser(response.data);
+      setFulfilled(true);
+    } catch (err: any) {
+      setRejected(true);
+      setError(
+        err?.response?.data?.errors?.length > 0
+          ? err?.response?.data?.errors[0]?.msg
+          : undefined
+      );
+    } finally {
+      setPending(false);
+    }
   };
 
   const logout = () => {
@@ -51,7 +64,7 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) =
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, submitLogin, logout, pending, fulfilled, rejected, error }}>
       {children}
     </UserContext.Provider>
   );

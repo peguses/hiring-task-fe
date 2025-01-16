@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
-// import { MenuContextProvider } from "./MenuContextProvider";
-// import { ApolloContextProvider } from "./ApolloContextProvider";
 import { UserContextProvider }  from "./UserContextProvider";
 import { FeedbackContextProvider } from "./FeedbackContextProvider";
+import { MenuContextProvider } from "./MenuContextProvider";
 
 export interface AppProviderProps {
   children: ReactNode;
@@ -12,10 +11,12 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({
   children,
 }) => {
   return (
-    // <ApolloContextProvider>
-      <FeedbackContextProvider>
-        <UserContextProvider>{children}</UserContextProvider>
-      </FeedbackContextProvider>
-    // </ApolloContextProvider>
+    <MenuContextProvider>
+      <UserContextProvider>
+        <FeedbackContextProvider>
+          {children}
+        </FeedbackContextProvider>
+      </UserContextProvider>
+    </MenuContextProvider>
   );
 };

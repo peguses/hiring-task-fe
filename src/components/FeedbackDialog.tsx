@@ -17,6 +17,8 @@ import { Button } from "./ui/button";
 import { useFeedback } from "../hooks/useFeedback";
 import { Feedback } from "../context/FeedbackContextProvider";
 import { useEffect } from "react";
+import { MenuEnum } from "../enums/menu.enum";
+import { useMenu } from "../hooks/useMenu";
 
 export const FeedbackDialog = () => {
 
@@ -28,9 +30,11 @@ export const FeedbackDialog = () => {
     formState: { errors },
   } = useForm<Feedback>();
 
-  const { submit, fulfilled, rejected } = useFeedback();
+  const { submit, fulfilled, rejected, pending } = useFeedback();
 
-  const comment  = watch("comment", "")
+  const comment  = watch("comment", "");
+
+  const { menu, setMenu } = useMenu();
 
   useEffect(() => {
     if (fulfilled && !rejected) {
@@ -52,7 +56,7 @@ export const FeedbackDialog = () => {
         key={"feed_back_dialog"}
         placement={"center"}
         motionPreset="slide-in-bottom"
-        open={true}
+        open={menu?.menu === MenuEnum.FEEDBACK_DIALOG}
         size={"xl"}
       >
         <DialogContent>
@@ -108,9 +112,10 @@ export const FeedbackDialog = () => {
           <DialogFooter>
             <Button
               _focus={{ outline: "none" }}
-              onClick={() =>
-                reset({ customerEmail: "", customerName: "", comment: "" })
-              }
+              onClick={() => {
+                reset({ customerEmail: "", customerName: "", comment: "" });
+                setMenu({menu: MenuEnum.LOGIN_DIALOG});
+              }}
               variant="outline"
             >
               Cancel
@@ -122,6 +127,7 @@ export const FeedbackDialog = () => {
               color={"whiteAlpha.950"}
               fontWeight="700"
               variant="surface"
+              loading ={pending} loadingText="Submitting..."
             >
               Submit
             </Button>

@@ -3,8 +3,13 @@ import { FaComment } from "react-icons/fa";
 import { MdLogin } from "react-icons/md";
 import { FeedbackDialog } from "../components/FeedbackDialog";
 import { LoginDialog } from "../components/LoginDialog";
+import { useMenu } from "../hooks/useMenu";
+import { MenuEnum } from "../enums/menu.enum";
 
 export const LandingPage = () => {
+ 
+  const { setMenu } = useMenu();
+
   return (
     <>
       <Box
@@ -24,6 +29,7 @@ export const LandingPage = () => {
           <Grid templateColumns="repeat(2, 1fr)" gap="6">
             <GridItem colSpan={1}>
               <IconButton
+                onClick={() => {setMenu({menu: MenuEnum.FEEDBACK_DIALOG})}}
                 marginTop={"50px"}
                 width={"100px"}
                 height={"50px"}
@@ -36,6 +42,7 @@ export const LandingPage = () => {
             </GridItem>
             <GridItem colSpan={1}>
               <IconButton
+                onClick={() => {setMenu({menu: MenuEnum.LOGIN_DIALOG})}}
                 marginTop={"50px"}
                 width={"100px"}
                 height={"50px"}
