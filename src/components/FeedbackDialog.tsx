@@ -1,46 +1,104 @@
 import {
-  Button,
-  DialogActionTrigger,
   DialogBody,
-  DialogCloseTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogRoot,
   DialogTitle,
+  Fieldset,
   HStack,
+  Input,
+  Stack,
+  Textarea,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { Field } from "./ui/field";
+import { Button } from "./ui/button";
+
+interface Feedback {
+  customerName: string;
+  email: string;
+  comment: string;
+}
 
 export const FeedbackDialog = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Feedback>();
+
   return (
     <HStack wrap="wrap" gap="4">
       <DialogRoot
         key={"feed_back_dialog"}
-        // placement={"center"}
+        placement={"center"}
         motionPreset="slide-in-bottom"
         open={true}
         size={"xl"}
       >
-        {/* <DialogTrigger asChild>
-          <Button variant="outline">Open Dialog ({"center"}) </Button>
-        </DialogTrigger> */}
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Dialog Title</DialogTitle>
+          <DialogHeader textAlignLast={"justify"}>
+            <DialogTitle>Feedback</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+            <Stack gap="4" align="flex-start" w="lg">
+              <Fieldset.Root size="lg">
+                <Fieldset.Content>
+                  <Field
+                    label="Name"
+                    invalid={!!errors.customerName}
+                    errorText={errors.customerName?.message}
+                    required
+                  >
+                    <Input
+                      {...register("customerName", {
+                        required: "Name is required",
+                      })}
+                    />
+                  </Field>
+                  <Field
+                    label="Email"
+                    invalid={!!errors.email}
+                    errorText={errors.email?.message}
+                    required
+                  >
+                    <Input
+                      {...register("email", {
+                        required: "Email is required",
+                      })}
+                    />
+                  </Field>
+                  <Field
+                    label="Feedback"
+                    // invalid={!!errors.comment}
+                    errorText={errors.comment?.message}
+                    required
+                  >
+                    <Textarea
+                      {...register("comment", {
+                        required: "Comment is required",
+                      })}
+                    />
+                  </Field>
+                </Fieldset.Content>
+              </Fieldset.Root>
+            </Stack>
           </DialogBody>
           <DialogFooter>
-            <DialogActionTrigger asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogActionTrigger>
-            <Button>Save</Button>
+            
+            
+            <Button variant="outline">Cancel</Button>
+            <Button
+                _focus={{ outline: "none" }}
+                backgroundColor={"#9c27b0"}
+                color={"whiteAlpha.950"}
+                fontWeight="700"
+                variant="surface"
+              >
+                Submit
+              </Button>
           </DialogFooter>
-          <DialogCloseTrigger />
         </DialogContent>
       </DialogRoot>
     </HStack>
