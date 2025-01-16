@@ -10,7 +10,9 @@ export interface Feedback {
 
 export interface FeedbackContextType {
   feedback?: Feedback | null;
-  submitting?: boolean;
+  rejected?: boolean;
+  pending?: boolean;
+  fulfilled?: boolean;
   error?: string;
   submit: (user: Feedback) => void;
   clear: () => void;
@@ -29,25 +31,34 @@ export const FeedbackContextProvider: React.FC<
 > = ({ children }) => {
   const [feedback, setFeedback] = useState<Feedback | undefined>(undefined);
 
-  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
+
+  const [fulfilled, setFulfilled] = useState<boolean>(false);
+
+  const [rejected, setRejected] = useState<boolean>(false);
 
   const [error, setError] = useState<string | undefined>(undefined);
 
   const submit = async (data: Feedback) => {
-
-    setSubmitting(true);
-
+    
+    setPending(true);
+    setFulfilled(false);
+    setRejected(false);
     setError(undefined);
 
     try {
-
       const response = await submitFeedback(data);
       setFeedback(response.data);
-
+      setFulfilled(true);
     } catch (err: any) {
-      setError(err.message);
+      setRejected(true);
+      setError(
+        err?.response?.data?.errors?.length > 0
+          ? err?.response?.data?.errors[0]?.msg
+          : undefined
+      );
     } finally {
-      setSubmitting(false);
+      setPending(false);
     }
   };
 
@@ -57,7 +68,7 @@ export const FeedbackContextProvider: React.FC<
 
   return (
     <FeedbackContext.Provider
-      value={{ feedback, submit, clear, submitting, error }}
+      value={{ feedback, submit, clear, pending, fulfilled, rejected, error }}
     >
       {children}
     </FeedbackContext.Provider>

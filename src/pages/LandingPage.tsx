@@ -1,9 +1,4 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, IconButton } from "@chakra-ui/react";
 import { FaComment } from "react-icons/fa";
 import { MdLogin } from "react-icons/md";
 import { FeedbackDialog } from "../components/FeedbackDialog";
@@ -19,7 +14,7 @@ export const LandingPage = () => {
         left={0}
         position={"absolute"}
         backgroundImage={[
-          "url('/login-1.jpg')", // for mobile
+          "url('/login-1.jpg')",
         ]}
         backgroundSize="cover"
         backgroundPosition="center"
@@ -55,8 +50,8 @@ export const LandingPage = () => {
           </Grid>
         </Box>
       </Box>
-      <FeedbackDialog/>
-      <LoginDialog/>
+      <FeedbackDialog />
+      <LoginDialog />
     </>
   );
 };

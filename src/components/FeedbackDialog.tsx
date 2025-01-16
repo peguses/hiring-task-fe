@@ -16,19 +16,31 @@ import { Field } from "./ui/field";
 import { Button } from "./ui/button";
 import { useFeedback } from "../hooks/useFeedback";
 import { Feedback } from "../context/FeedbackContextProvider";
+import { useEffect } from "react";
 
 export const FeedbackDialog = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Feedback>();
 
-  const {feedback, submit, submitting} = useFeedback();
+  const { submit, fulfilled, rejected } = useFeedback();
+
+  useEffect(() => {
+    if (fulfilled && !rejected) {
+      reset({
+        customerEmail: "",
+        customerName: "",
+        comment: "",
+      });
+    }
+  }, [fulfilled, reset, rejected]);
 
   const onSubmit = (data: Feedback) => {
-      submit(data);
-  }
+    submit(data);
+  };
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -88,7 +100,15 @@ export const FeedbackDialog = () => {
             </Stack>
           </DialogBody>
           <DialogFooter>
-            <Button variant="outline">Cancel</Button>
+            <Button
+              _focus={{ outline: "none" }}
+              onClick={() =>
+                reset({ customerEmail: "", customerName: "", comment: "" })
+              }
+              variant="outline"
+            >
+              Cancel
+            </Button>
             <Button
               onClick={handleSubmit(onSubmit)}
               _focus={{ outline: "none" }}
