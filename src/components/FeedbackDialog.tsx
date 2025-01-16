@@ -14,12 +14,8 @@ import {
 import { useForm } from "react-hook-form";
 import { Field } from "./ui/field";
 import { Button } from "./ui/button";
-
-interface Feedback {
-  customerName: string;
-  email: string;
-  comment: string;
-}
+import { useFeedback } from "../hooks/useFeedback";
+import { Feedback } from "../context/FeedbackContextProvider";
 
 export const FeedbackDialog = () => {
   const {
@@ -27,6 +23,12 @@ export const FeedbackDialog = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Feedback>();
+
+  const {feedback, submit, submitting} = useFeedback();
+
+  const onSubmit = (data: Feedback) => {
+      submit(data);
+  }
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -59,19 +61,19 @@ export const FeedbackDialog = () => {
                   </Field>
                   <Field
                     label="Email"
-                    invalid={!!errors.email}
-                    errorText={errors.email?.message}
+                    invalid={!!errors.customerEmail}
+                    errorText={errors.customerEmail?.message}
                     required
                   >
                     <Input
-                      {...register("email", {
+                      {...register("customerEmail", {
                         required: "Email is required",
                       })}
                     />
                   </Field>
                   <Field
                     label="Feedback"
-                    // invalid={!!errors.comment}
+                    invalid={!!errors.comment}
                     errorText={errors.comment?.message}
                     required
                   >
@@ -86,18 +88,17 @@ export const FeedbackDialog = () => {
             </Stack>
           </DialogBody>
           <DialogFooter>
-            
-            
             <Button variant="outline">Cancel</Button>
             <Button
-                _focus={{ outline: "none" }}
-                backgroundColor={"#9c27b0"}
-                color={"whiteAlpha.950"}
-                fontWeight="700"
-                variant="surface"
-              >
-                Submit
-              </Button>
+              onClick={handleSubmit(onSubmit)}
+              _focus={{ outline: "none" }}
+              backgroundColor={"#9c27b0"}
+              color={"whiteAlpha.950"}
+              fontWeight="700"
+              variant="surface"
+            >
+              Submit
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogRoot>

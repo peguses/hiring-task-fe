@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App.tsx";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { Theme } from "@radix-ui/themes"
+import { AppContextProvider } from "./context/AppContextProvider.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ChakraProvider value={defaultSystem}>
       <Theme>
-        <App />
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
       </Theme>
     </ChakraProvider>
   </StrictMode>

@@ -7,6 +7,7 @@ import {
 import { FaComment } from "react-icons/fa";
 import { MdLogin } from "react-icons/md";
 import { FeedbackDialog } from "../components/FeedbackDialog";
+import { LoginDialog } from "../components/LoginDialog";
 
 export const LandingPage = () => {
   return (
@@ -54,7 +55,8 @@ export const LandingPage = () => {
           </Grid>
         </Box>
       </Box>
-      <FeedbackDialog></FeedbackDialog>
+      <FeedbackDialog/>
+      <LoginDialog/>
     </>
   );
 };

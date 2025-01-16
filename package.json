@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "env-cmd -f ./env/local.env vite",
+    "build:local": "env-cmd -f ./env/local.env vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -16,8 +17,11 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@radix-ui/themes": "^3.1.6",
+    "@types/node": "^22.10.7",
     "add": "^2.0.6",
     "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "env-cmd": "^10.1.0",
     "field": "^1.0.1",
     "framer-motion": "^11.18.0",
     "next-themes": "^0.4.4",
