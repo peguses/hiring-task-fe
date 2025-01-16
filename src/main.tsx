@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { ThemeProvider } from "next-themes"
 
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ChakraProvider value={defaultSystem}>
