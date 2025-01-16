@@ -8,7 +8,7 @@ export interface Menu {
 
 export interface MenuContextType {
     menu: Menu | null;
-    setMenu: (menu: Menu) => void;
+    setMenu: (menu: Menu | null) => void;
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined);

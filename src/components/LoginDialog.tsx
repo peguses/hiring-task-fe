@@ -17,6 +17,7 @@ import { MenuEnum } from "../enums/menu.enum";
 import { useMenu } from "../hooks/useMenu";
 import { useUser } from "../hooks/useUser";
 import { User } from "../context/UserContextProvider";
+import { useEffect } from "react";
 
 
 export const LoginDialog = () => {
@@ -29,11 +30,17 @@ export const LoginDialog = () => {
 
   const { menu, setMenu } = useMenu();
 
-  const {submitLogin, pending} = useUser();
+  const {submitLogin, pending, fulfilled, rejected, error} = useUser();
 
   const onSubmit = (user: User) => {
     submitLogin(user)
   }
+
+  useEffect(() => {
+      if (!pending && fulfilled && !rejected && !error) {
+        setMenu(null)
+      }
+  }, [pending, fulfilled, rejected, error, setMenu])
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -71,6 +78,7 @@ export const LoginDialog = () => {
                     required
                   >
                     <Input
+                      type="password"
                       {...register("password", {
                         required: "Password is required",
                       })}
