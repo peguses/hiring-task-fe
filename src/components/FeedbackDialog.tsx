@@ -1,4 +1,5 @@
 import {
+  Box,
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -7,6 +8,7 @@ import {
   DialogTitle,
   Fieldset,
   HStack,
+  IconButton,
   Input,
   Stack,
   Textarea,
@@ -19,12 +21,11 @@ import { Feedback } from "../context/FeedbackContextProvider";
 import { useEffect } from "react";
 import { MenuEnum } from "../enums/menu.enum";
 import { useMenu } from "../hooks/useMenu";
-import { MdLogin } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { FaComment } from "react-icons/fa";
 import { Alert } from "./ui/alert";
 
 export const FeedbackDialog = () => {
-
   const {
     register,
     handleSubmit,
@@ -35,7 +36,7 @@ export const FeedbackDialog = () => {
 
   const { submit, fulfilled, rejected, pending, error, clear } = useFeedback();
 
-  const comment  = watch("comment", "");
+  const comment = watch("comment", "");
 
   const { menu, setMenu } = useMenu();
 
@@ -64,16 +65,34 @@ export const FeedbackDialog = () => {
         onExitComplete={() => clear()}
       >
         <DialogContent>
-          <DialogHeader textAlignLast={"justify"}>
+          <DialogHeader display={"flex"} justifyContent={"space-between"}>
             <DialogTitle>Feedback</DialogTitle>
+            <Box display={"flex"} justifyItems={"right"}>
+              <IconButton
+                height={"24px"}
+                width={"24px"}
+                onClick={() => {
+                  setMenu({ menu: undefined });
+                }}
+                _focus={{ outline: "none" }}
+                backgroundColor={"#9c27b0"}
+                color={"whiteAlpha.950"}
+                fontWeight="700"
+                variant="surface"
+              >
+                <MdClose />
+              </IconButton>
+            </Box>
           </DialogHeader>
           <DialogBody>
-          {rejected && (<Alert
-            marginTop={"10px"}
-            status="error"
-            title={error}
-            marginBottom={"10px"}
-          /> )}
+            {rejected && (
+              <Alert
+                marginTop={"10px"}
+                status="error"
+                title={error}
+                marginBottom={"10px"}
+              />
+            )}
             <Stack gap="4" align="flex-start" w="lg">
               <Fieldset.Root size="lg">
                 <Fieldset.Content>
@@ -125,28 +144,17 @@ export const FeedbackDialog = () => {
           </DialogBody>
           <DialogFooter>
             <Button
-              _focus={{ outline: "none" }}
-              onClick={() => {
-                reset({ customerEmail: "", customerName: "", comment: "" });
-                setMenu({menu: MenuEnum.LOGIN_DIALOG});
-              }}  
-              backgroundColor={"#9c27b0"}
-              color={"whiteAlpha.950"}
-              fontWeight="700"
-              variant="surface"
-            >
-              <MdLogin />Login
-            </Button>
-            <Button
               onClick={handleSubmit(onSubmit)}
               _focus={{ outline: "none" }}
               backgroundColor={"#9c27b0"}
               color={"whiteAlpha.950"}
               fontWeight="700"
               variant="surface"
-              loading ={pending} loadingText="Submitting..."
+              loading={pending}
+              loadingText="Submitting..."
             >
-              <FaComment/>Submit
+              <FaComment />
+              Submit
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -35,7 +35,7 @@ export const MessageDialog: React.FC<MessageDialogProps> = ({ message, open }) =
               <DialogFooter>
                 <Button
                   onClick={() => {
-                    setMenu({ menu: "" });
+                    setMenu({ menu: undefined });
                   }}
                   _focus={{ outline: "none" }}
                   backgroundColor={"#9c27b0"}

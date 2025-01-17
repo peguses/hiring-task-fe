@@ -1,4 +1,5 @@
 import {
+  Box,
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -7,6 +8,7 @@ import {
   DialogTitle,
   Fieldset,
   HStack,
+  IconButton,
   Input,
   Stack,
 } from "@chakra-ui/react";
@@ -18,12 +20,12 @@ import { useMenu } from "../hooks/useMenu";
 import { useUser } from "../hooks/useUser";
 import { User } from "../context/UserContextProvider";
 import { useEffect } from "react";
-import { MdLogin } from "react-icons/md";
+import { MdClose, MdLogin } from "react-icons/md";
 import { FaComment } from "react-icons/fa";
 import { Alert } from "./ui/alert";
+import { ToggleTip } from "./ui/toggle-tip";
 
 export const LoginDialog = () => {
-  
   const {
     register,
     reset,
@@ -44,7 +46,6 @@ export const LoginDialog = () => {
       setMenu({ menu: MenuEnum.DASHBOARD });
     }
   }, [pending, fulfilled, rejected, error, setMenu]);
-  
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -56,16 +57,34 @@ export const LoginDialog = () => {
         size={"xl"}
       >
         <DialogContent>
-          <DialogHeader textAlignLast={"justify"}>
+          <DialogHeader display="flex" justifyContent={"space-between"}>
             <DialogTitle>Login</DialogTitle>
+            <Box display={"flex"} justifyItems={"right"}>
+              <IconButton
+                height={"24px"}
+                width={"24px"}
+                onClick={() => {
+                  setMenu({ menu: undefined });
+                }}
+                _focus={{ outline: "none" }}
+                backgroundColor={"#9c27b0"}
+                color={"whiteAlpha.950"}
+                fontWeight="700"
+                variant="surface"
+              >
+                <MdClose />
+              </IconButton>
+            </Box>
           </DialogHeader>
           <DialogBody>
-          {rejected && (<Alert
-            marginTop={"10px"}
-            status="error"
-            title={error}
-            marginBottom={"10px"}
-          /> )}
+            {rejected && (
+              <Alert
+                marginTop={"10px"}
+                status="error"
+                title={error}
+                marginBottom={"10px"}
+              />
+            )}
             <Stack gap="4" align="flex-start" w="lg">
               <Fieldset.Root size="lg">
                 <Fieldset.Content>
@@ -99,33 +118,21 @@ export const LoginDialog = () => {
             </Stack>
           </DialogBody>
           <DialogFooter>
-            <Button
-              onClick={() => {
-                reset({ name: "", password: "" });
-                setMenu({ menu: MenuEnum.FEEDBACK_DIALOG });
-              }}
-              _focus={{ outline: "none" }}
-              backgroundColor={"#9c27b0"}
-              color={"whiteAlpha.950"}
-              fontWeight="700"
-              variant="surface"
-            >
-              <FaComment />
-              Comment
-            </Button>
-            <Button
-              onClick={handleSubmit(onSubmit)}
-              _focus={{ outline: "none" }}
-              backgroundColor={"#9c27b0"}
-              color={"whiteAlpha.950"}
-              fontWeight="700"
-              variant="surface"
-              loading={pending}
-              loadingText="Login..."
-            >
-              <MdLogin />
-              Login
-            </Button>
+            <ToggleTip content="This is the tooltip content">
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                _focus={{ outline: "none" }}
+                backgroundColor={"#9c27b0"}
+                color={"whiteAlpha.950"}
+                fontWeight="700"
+                variant="surface"
+                loading={pending}
+                loadingText="Login..."
+              >
+                <MdLogin />
+                Login
+              </Button>
+            </ToggleTip>
           </DialogFooter>
         </DialogContent>
       </DialogRoot>

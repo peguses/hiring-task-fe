@@ -11,6 +11,7 @@ import { FeedbackViewDialog } from "../components/FeedbackViewDialog";
 import { MdExitToApp } from 'react-icons/md';
 import { useEffect } from "react";
 import { MessageDialog } from "../components/MessageDialog";
+import { Tooltip } from "../components/ui/tooltip";
 
 export const LandingPage = () => {
 
@@ -85,6 +86,7 @@ export const LandingPage = () => {
                   <MdLogin size={70} />
                 </IconButton>
               ) : (
+                <Tooltip content="This is the tooltip content">
                 <IconButton
                   onClick={() => {
                     setMenu({ menu: MenuEnum.LOGOUT_DIALOG });
@@ -101,6 +103,7 @@ export const LandingPage = () => {
                 >
                   <MdExitToApp size={70} />
                 </IconButton>
+                </Tooltip>
               )}
             </GridItem>
           </Grid>
