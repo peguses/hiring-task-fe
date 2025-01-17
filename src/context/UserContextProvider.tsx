@@ -24,8 +24,9 @@ export interface UserProviderProps {
   children: ReactNode;
 }
 
-export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) => {
-
+export const UserContextProvider: React.FC<UserProviderProps> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   const [pending, setPending] = useState<boolean>(false);
@@ -48,12 +49,11 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) =
       if (response?.data) {
         setUser(response.data);
         setFulfilled(true);
-      } else  {
+      } else {
         setFulfilled(false);
         setRejected(true);
         setError("Login failed");
       }
-
     } catch (err: any) {
       setRejected(true);
       setError(
@@ -71,7 +71,9 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) =
   };
 
   return (
-    <UserContext.Provider value={{ user, submitLogin, logout, pending, fulfilled, rejected, error }}>
+    <UserContext.Provider
+      value={{ user, submitLogin, logout, pending, fulfilled, rejected, error }}
+    >
       {children}
     </UserContext.Provider>
   );

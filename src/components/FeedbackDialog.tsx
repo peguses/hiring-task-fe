@@ -21,6 +21,7 @@ import { MenuEnum } from "../enums/menu.enum";
 import { useMenu } from "../hooks/useMenu";
 import { MdLogin } from "react-icons/md";
 import { FaComment } from "react-icons/fa";
+import { Alert } from "./ui/alert";
 
 export const FeedbackDialog = () => {
 
@@ -32,7 +33,7 @@ export const FeedbackDialog = () => {
     formState: { errors },
   } = useForm<Feedback>();
 
-  const { submit, fulfilled, rejected, pending } = useFeedback();
+  const { submit, fulfilled, rejected, pending, error } = useFeedback();
 
   const comment  = watch("comment", "");
 
@@ -66,6 +67,12 @@ export const FeedbackDialog = () => {
             <DialogTitle>Feedback</DialogTitle>
           </DialogHeader>
           <DialogBody>
+          {rejected && (<Alert
+            marginTop={"10px"}
+            status="error"
+            title={error}
+            marginBottom={"10px"}
+          /> )}
             <Stack gap="4" align="flex-start" w="lg">
               <Fieldset.Root size="lg">
                 <Fieldset.Content>

@@ -52,6 +52,7 @@ export interface FeedbackContextProviderProps {
 export const FeedbackContextProvider: React.FC<
   FeedbackContextProviderProps
 > = ({ children }) => {
+  
   const [feedback, setFeedback] = useState<Feedback | undefined>(undefined);
 
   const [paginatedFeedback, setPaginatedFeedback] = useState<PaginatedFeedback | undefined>(undefined);
@@ -67,15 +68,18 @@ export const FeedbackContextProvider: React.FC<
   const [error, setError] = useState<string | undefined>(undefined);
 
   const submit = async (data: Feedback) => {
+
     setPending(true);
     setFulfilled(false);
     setRejected(false);
     setError(undefined);
 
     try {
+
       const response = await submitFeedback(data);
       setFeedback(response.data);
       setFulfilled(true);
+
     } catch (err: any) {
       setRejected(true);
       setError(
@@ -89,6 +93,7 @@ export const FeedbackContextProvider: React.FC<
   };
 
   const fetchAll = async (page?: Page) => {
+
     setPending(true);
     setFulfilled(false);
     setRejected(false);
