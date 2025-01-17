@@ -10,10 +10,11 @@ import { useUser } from "../hooks/useUser";
 import { FeedbackViewDialog } from "../components/FeedbackViewDialog";
 import { MdExitToApp } from 'react-icons/md';
 import { useEffect } from "react";
+import { MessageDialog } from "../components/MessageDialog";
 
 export const LandingPage = () => {
 
-  const { setMenu } = useMenu();
+  const { setMenu, menu } = useMenu();
 
   const { user, logout } = useUser();
 
@@ -86,7 +87,9 @@ export const LandingPage = () => {
               ) : (
                 <IconButton
                   onClick={() => {
-                    logout()
+                    setMenu({ menu: MenuEnum.LOGOUT_DIALOG });
+                    logout();
+                    
                   }}
                   marginTop={"50px"}
                   width={"100px"}
@@ -106,6 +109,7 @@ export const LandingPage = () => {
       <FeedbackDialog />
       <LoginDialog />
       <FeedbackViewDialog />
+      <MessageDialog message={"Logout successful"} open={menu?.menu === MenuEnum.LOGOUT_DIALOG}/>
     </>
   );
 };
