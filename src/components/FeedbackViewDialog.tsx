@@ -9,8 +9,10 @@ import {
   GridItem,
   Heading,
   HStack,
+  IconButton,
   Stack,
   Table,
+  Textarea,
 } from "@chakra-ui/react";
 import { Button } from "./ui/button";
 import { MenuEnum } from "../enums/menu.enum";
@@ -25,23 +27,30 @@ import {
 } from "./ui/pagination";
 import PieChart from "./charts/PieChart";
 import { Page } from "../context/FeedbackContextProvider";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const FeedbackViewDialog = () => {
-  const { menu } = useMenu();
+  const { menu, setMenu } = useMenu();
 
   const [data, setData] = useState<number[]>([10, 20, 30, 40]);
 
   const { fetchAll } = useFeedback();
 
-  const {paginatedFeedback, fulfilled, rejected} = useFeedback();
+  const { paginatedFeedback, fulfilled, rejected } = useFeedback();
+
+  const [selectedRow, setSelectedRow] = useState<number | undefined>(undefined);
+
+  const [selectedComment, setSelectedComment] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    if (menu?.menu === MenuEnum.DASHBOARD) fetchAll({page: 1, pageSize: 10});
+    if (menu?.menu === MenuEnum.DASHBOARD) fetchAll({ page: 1, pageSize: 10 });
   }, [menu]);
 
   const onPageChange = (page: Page) => {
-    fetchAll({page: page.page, pageSize: page.pageSize})
-  }
+    fetchAll({ page: page.page, pageSize: page.pageSize });
+  };
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -69,16 +78,39 @@ export const FeedbackViewDialog = () => {
                         <Table.ColumnHeader textAlign="end">
                           Sentiment Score
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader>Action</Table.ColumnHeader>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      {paginatedFeedback?.feedbacks?.length !== 0 && paginatedFeedback?.feedbacks?.map((item, index) => (
-                        <Table.Row key={index}>
-                          <Table.Cell>{item.customerName}</Table.Cell>
-                          <Table.Cell>{item.customerEmail}</Table.Cell>
-                          <Table.Cell textAlign="end">{item.sentimentScore}</Table.Cell>
-                        </Table.Row>
-                      ))}
+                      {paginatedFeedback?.feedbacks?.length !== 0 &&
+                        paginatedFeedback?.feedbacks?.map((item, index) => (
+                          <Table.Row key={index}>
+                            <Table.Cell>{item.customerName}</Table.Cell>
+                            <Table.Cell>{item.customerEmail}</Table.Cell>
+                            <Table.Cell textAlign="end">
+                              {item.sentimentScore}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <IconButton
+                                _focus={{ outline: "none" }}
+                                onClick={() => {
+                                  setSelectedRow(index);
+                                  setSelectedComment(item.comment);
+                                }}
+                                width={"24px"}
+                                height={"24px"}
+                                color={"#9c27b0"}
+                                opacity={0.9}
+                              >
+                                {selectedRow === index ? (
+                                  <FaEye />
+                                ) : (
+                                  <FaEyeSlash />
+                                )}
+                              </IconButton>
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
                     </Table.Body>
                   </Table.Root>
 
@@ -98,31 +130,35 @@ export const FeedbackViewDialog = () => {
                 </Stack>
               </GridItem>
               <GridItem colSpan={1} display={"flex"} justifyContent={"center"}>
-                <PieChart data={data} />
+                <Grid templateColumns="repeat(1, 1fr)" marginTop={"50px"}>
+                  <GridItem>
+                    <PieChart data={data} />
+                  </GridItem>
+                  <GridItem>
+                    <Textarea
+                      value={selectedComment}
+                      readOnly
+                      overflowY="auto"
+                      width={"300px"}
+                      height="300px"
+                    />
+                  </GridItem>
+                </Grid>
               </GridItem>
             </Grid>
           </DialogBody>
           <DialogFooter>
             <Button
               onClick={() => {
-                //   reset({ name: "", password: "" });
-                //   setMenu({ menu: MenuEnum.FEEDBACK_DIALOG });
+                setMenu({ menu: undefined });
               }}
-              _focus={{ outline: "none" }}
-              variant="outline"
-            >
-              Cancel
-            </Button>
-            <Button
-              // onClick={handleSubmit(onSubmit)}
               _focus={{ outline: "none" }}
               backgroundColor={"#9c27b0"}
               color={"whiteAlpha.950"}
               fontWeight="700"
               variant="surface"
-              // loading ={pending} loadingText="Login..."
             >
-              Login
+              Exit
             </Button>
           </DialogFooter>
         </DialogContent>

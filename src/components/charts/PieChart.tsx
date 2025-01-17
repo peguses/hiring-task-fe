@@ -9,8 +9,8 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
-    const width = 400;
-    const height = 400;
+    const width = 300;
+    const height = 300;
     const radius = Math.min(width, height) / 2;
 
     if (svgRef.current) {
