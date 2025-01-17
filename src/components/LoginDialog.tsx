@@ -18,6 +18,8 @@ import { useMenu } from "../hooks/useMenu";
 import { useUser } from "../hooks/useUser";
 import { User } from "../context/UserContextProvider";
 import { useEffect } from "react";
+import { MdLogin } from "react-icons/md";
+import { FaComment } from "react-icons/fa";
 
 
 export const LoginDialog = () => {
@@ -38,7 +40,7 @@ export const LoginDialog = () => {
 
   useEffect(() => {
       if (!pending && fulfilled && !rejected && !error) {
-        setMenu(null)
+        setMenu({menu: MenuEnum.DASHBOARD})
       }
   }, [pending, fulfilled, rejected, error, setMenu])
 
@@ -95,9 +97,12 @@ export const LoginDialog = () => {
                 setMenu({ menu: MenuEnum.FEEDBACK_DIALOG });
               }}
               _focus={{ outline: "none" }}
-              variant="outline"
+              backgroundColor={"#9c27b0"}
+              color={"whiteAlpha.950"}
+              fontWeight="700"
+              variant="surface"
             >
-              Cancel
+              <FaComment/>Comment
             </Button>
             <Button
               onClick={handleSubmit(onSubmit)}
@@ -108,7 +113,7 @@ export const LoginDialog = () => {
               variant="surface"
               loading ={pending} loadingText="Login..."
             >
-              Login
+              <MdLogin />Login
             </Button>
           </DialogFooter>
         </DialogContent>

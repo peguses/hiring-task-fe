@@ -9,11 +9,17 @@ import { MdDashboard } from "react-icons/md";
 import { useUser } from "../hooks/useUser";
 import { FeedbackViewDialog } from "../components/FeedbackViewDialog";
 import { MdExitToApp } from 'react-icons/md';
+import { useEffect } from "react";
 
 export const LandingPage = () => {
+
   const { setMenu } = useMenu();
 
   const { user, logout } = useUser();
+
+  useEffect(() => {
+    setMenu({ menu: MenuEnum.FEEDBACK_DIALOG });
+  }, [])
 
   return (
     <>

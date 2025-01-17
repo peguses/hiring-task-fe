@@ -19,6 +19,8 @@ import { Feedback } from "../context/FeedbackContextProvider";
 import { useEffect } from "react";
 import { MenuEnum } from "../enums/menu.enum";
 import { useMenu } from "../hooks/useMenu";
+import { MdLogin } from "react-icons/md";
+import { FaComment } from "react-icons/fa";
 
 export const FeedbackDialog = () => {
 
@@ -115,10 +117,13 @@ export const FeedbackDialog = () => {
               onClick={() => {
                 reset({ customerEmail: "", customerName: "", comment: "" });
                 setMenu({menu: MenuEnum.LOGIN_DIALOG});
-              }}
-              variant="outline"
+              }}  
+              backgroundColor={"#9c27b0"}
+              color={"whiteAlpha.950"}
+              fontWeight="700"
+              variant="surface"
             >
-              Cancel
+              <MdLogin />Login
             </Button>
             <Button
               onClick={handleSubmit(onSubmit)}
@@ -129,7 +134,7 @@ export const FeedbackDialog = () => {
               variant="surface"
               loading ={pending} loadingText="Submitting..."
             >
-              Submit
+              <FaComment/>Submit
             </Button>
           </DialogFooter>
         </DialogContent>
