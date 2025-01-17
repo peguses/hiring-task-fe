@@ -32,11 +32,11 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 export const FeedbackViewDialog = () => {
   const { menu, setMenu } = useMenu();
 
-  const [data, setData] = useState<number[]>([10, 20, 30, 40]);
+  const [data] = useState<number[]>([10, 20, 30]);
 
   const { fetchAll } = useFeedback();
 
-  const { paginatedFeedback, fulfilled, rejected } = useFeedback();
+  const { paginatedFeedback } = useFeedback();
 
   const [selectedRow, setSelectedRow] = useState<number | undefined>(undefined);
 
