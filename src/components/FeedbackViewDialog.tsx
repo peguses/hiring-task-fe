@@ -28,6 +28,7 @@ import {
 import PieChart, { DataUnit } from "./charts/PieChart";
 import { Page } from "../context/FeedbackContextProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ColoredTableCell } from "./ColoredTableCell";
 
 export const FeedbackViewDialog = () => {
 
@@ -58,17 +59,17 @@ export const FeedbackViewDialog = () => {
           {
             value: statistics.neutral,
             label: "Natural",
-            color: "blue"
+            color: "#558ff7"
           },
           {
             value: statistics.negative,
             label: "Negative",
-            color: "red"
+            color: "#f36455"
           },
           {
             value: statistics.positive,
             label: "Positive",
-            color: "green"
+            color: "#67bd71"
           }
         ])
       }
@@ -77,6 +78,16 @@ export const FeedbackViewDialog = () => {
   const onPageChange = (page: Page) => {
     fetchAll({ page: page.page, pageSize: page.pageSize });
   };
+
+  const sentimentLabel = (num: number) => {
+    if (num > 0) {
+      return <ColoredTableCell bgColor={"#67bd71"} color={"white"} label={num}/>
+    } else if (num < 0) {
+      return <ColoredTableCell bgColor={"#f36455"} color={"white"} label={num}/>
+    } else {
+      return <ColoredTableCell bgColor={"#558ff7"} color={"white"} label={num}/>
+    }
+  }
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -89,7 +100,7 @@ export const FeedbackViewDialog = () => {
       >
         <DialogContent height={"850px"}>
           <DialogHeader textAlignLast={"justify"}>
-            <DialogTitle>Feedbacks</DialogTitle>
+            <DialogTitle fontSize={"24px"}>Feedbacks</DialogTitle>
           </DialogHeader>
           <DialogBody height={"100px"}>
             <Grid templateColumns="repeat(2, 1fr)" gap="6">
@@ -114,7 +125,7 @@ export const FeedbackViewDialog = () => {
                             <Table.Cell>{item.customerName}</Table.Cell>
                             <Table.Cell>{item.customerEmail}</Table.Cell>
                             <Table.Cell textAlign="end">
-                              {item.sentimentScore}
+                              {sentimentLabel(item?.sentimentScore ?? 0)}
                             </Table.Cell>
                             <Table.Cell>
                               <IconButton
