@@ -20,7 +20,7 @@ import { User } from "../context/UserContextProvider";
 import { useEffect } from "react";
 import { MdLogin } from "react-icons/md";
 import { FaComment } from "react-icons/fa";
-
+import { Alert } from "./ui/alert";
 
 export const LoginDialog = () => {
   const {
@@ -32,17 +32,17 @@ export const LoginDialog = () => {
 
   const { menu, setMenu } = useMenu();
 
-  const {submitLogin, pending, fulfilled, rejected, error} = useUser();
+  const { submitLogin, pending, fulfilled, rejected, error } = useUser();
 
   const onSubmit = (user: User) => {
-    submitLogin(user)
-  }
+    submitLogin(user);
+  };
 
   useEffect(() => {
-      if (!pending && fulfilled && !rejected && !error) {
-        setMenu({menu: MenuEnum.DASHBOARD})
-      }
-  }, [pending, fulfilled, rejected, error, setMenu])
+    if (!pending && fulfilled && !rejected && !error) {
+      setMenu({ menu: MenuEnum.DASHBOARD });
+    }
+  }, [pending, fulfilled, rejected, error, setMenu]);
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -58,6 +58,12 @@ export const LoginDialog = () => {
             <DialogTitle>Login</DialogTitle>
           </DialogHeader>
           <DialogBody>
+          {rejected && (<Alert
+            marginTop={"10px"}
+            status="error"
+            title={error}
+            marginBottom={"10px"}
+          /> )}
             <Stack gap="4" align="flex-start" w="lg">
               <Fieldset.Root size="lg">
                 <Fieldset.Content>
@@ -102,7 +108,8 @@ export const LoginDialog = () => {
               fontWeight="700"
               variant="surface"
             >
-              <FaComment/>Comment
+              <FaComment />
+              Comment
             </Button>
             <Button
               onClick={handleSubmit(onSubmit)}
@@ -111,9 +118,11 @@ export const LoginDialog = () => {
               color={"whiteAlpha.950"}
               fontWeight="700"
               variant="surface"
-              loading ={pending} loadingText="Login..."
+              loading={pending}
+              loadingText="Login..."
             >
-              <MdLogin />Login
+              <MdLogin />
+              Login
             </Button>
           </DialogFooter>
         </DialogContent>

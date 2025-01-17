@@ -45,8 +45,15 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({ children }) =
 
     try {
       const response = await requestLogin(data);
-      setUser(response.data);
-      setFulfilled(true);
+      if (response?.data) {
+        setUser(response.data);
+        setFulfilled(true);
+      } else  {
+        setFulfilled(false);
+        setRejected(true);
+        setError("Login failed");
+      }
+
     } catch (err: any) {
       setRejected(true);
       setError(
