@@ -10,3 +10,7 @@ export const submitFeedback = async(data: Feedback):Promise<AxiosResponse<any>> 
 export const fetchFeedbacks = async(page?: Page):Promise<AxiosResponse<any>> => {
     return apiKit.get(`/feedbacks?page=${page?.page}&limit=${page?.pageSize}`)
 }
+
+export const fetchFeedbackStatistics = async():Promise<AxiosResponse<any>> => {
+    return apiKit.get(`/feedbacks/statistics`)
+}

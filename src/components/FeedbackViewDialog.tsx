@@ -25,18 +25,20 @@ import {
   PaginationPrevTrigger,
   PaginationRoot,
 } from "./ui/pagination";
-import PieChart from "./charts/PieChart";
+import PieChart, { DataUnit } from "./charts/PieChart";
 import { Page } from "../context/FeedbackContextProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const FeedbackViewDialog = () => {
+
   const { menu, setMenu } = useMenu();
 
-  const [data] = useState<number[]>([10, 20, 30]);
+  const [chart, setChart] = useState<DataUnit[]>([{
+    value: 100, label: "neutral",
+    color: "green"
+  }]);
 
-  const { fetchAll } = useFeedback();
-
-  const { paginatedFeedback } = useFeedback();
+  const { paginatedFeedback, fetchAll, fetchStatistics, statistics, fulfilled } = useFeedback();
 
   const [selectedRow, setSelectedRow] = useState<number | undefined>(undefined);
 
@@ -45,8 +47,32 @@ export const FeedbackViewDialog = () => {
   );
 
   useEffect(() => {
-    if (menu?.menu === MenuEnum.DASHBOARD) fetchAll({ page: 1, pageSize: 10 });
+    if (menu?.menu === MenuEnum.DASHBOARD) { 
+      fetchAll({ page: 1, pageSize: 10 }); fetchStatistics() 
+    };
   }, [menu]);
+
+  useEffect(() => {
+      if (statistics && fulfilled) {
+        setChart([
+          {
+            value: statistics.neutral,
+            label: "Natural",
+            color: "blue"
+          },
+          {
+            value: statistics.negative,
+            label: "Negative",
+            color: "red"
+          },
+          {
+            value: statistics.positive,
+            label: "Positive",
+            color: "green"
+          }
+        ])
+      }
+  }, [statistics, fulfilled])
 
   const onPageChange = (page: Page) => {
     fetchAll({ page: page.page, pageSize: page.pageSize });
@@ -132,7 +158,7 @@ export const FeedbackViewDialog = () => {
               <GridItem colSpan={1} display={"flex"} justifyContent={"center"}>
                 <Grid templateColumns="repeat(1, 1fr)" marginTop={"50px"}>
                   <GridItem>
-                    <PieChart data={data} />
+                    <PieChart data={chart} />
                   </GridItem>
                   <GridItem>
                     <Textarea

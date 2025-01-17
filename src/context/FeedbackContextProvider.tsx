@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
-import { fetchFeedbacks, submitFeedback } from "../services/feedback.service";
+import { fetchFeedbacks, fetchFeedbackStatistics, submitFeedback } from "../services/feedback.service";
 
 export interface Feedback {
   customerName: string;
@@ -21,15 +21,23 @@ export interface Page {
   pageSize: number;
 }
 
+export interface FeedbackStatistics {
+    positive: number;
+    negative: number;
+    neutral: number
+}
+
 export interface FeedbackContextType {
   feedback?: Feedback | null;
   paginatedFeedback?: PaginatedFeedback;
+  statistics? : FeedbackStatistics;
   rejected?: boolean;
   pending?: boolean;
   fulfilled?: boolean;
   error?: string;
   submit: (user: Feedback) => void;
   fetchAll: (page?: Page) => void;
+  fetchStatistics: () => void;
   clear: () => void;
 }
 
@@ -47,6 +55,8 @@ export const FeedbackContextProvider: React.FC<
   const [feedback, setFeedback] = useState<Feedback | undefined>(undefined);
 
   const [paginatedFeedback, setPaginatedFeedback] = useState<PaginatedFeedback | undefined>(undefined);
+
+  const [statistics, setStatistics] = useState<FeedbackStatistics | undefined>(undefined)
 
   const [pending, setPending] = useState<boolean>(false);
 
@@ -100,6 +110,30 @@ export const FeedbackContextProvider: React.FC<
     }
   };
 
+  const fetchStatistics = async() => {
+
+    setPending(true);
+    setFulfilled(false);
+    setRejected(false);
+    setError(undefined);
+
+    try {
+      const response = await fetchFeedbackStatistics();
+      setStatistics({...response.data})
+      setFulfilled(true);
+    } catch (err: any) {
+      setRejected(true);
+      setError(
+        err?.response?.data?.errors?.length > 0
+          ? err?.response?.data?.errors[0]?.msg
+          : undefined
+      );
+    } finally {
+      setPending(false);
+    }
+
+  }
+
   const clear = () => {
     setFeedback(undefined);
   };
@@ -109,8 +143,10 @@ export const FeedbackContextProvider: React.FC<
       value={{
         feedback,
         paginatedFeedback,
+        statistics,
         submit,
         fetchAll,
+        fetchStatistics,
         clear,
         pending,
         fulfilled,

@@ -1,8 +1,15 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
+import { Box, Grid, GridItem } from "@chakra-ui/react";
 
-interface PieChartProps {
-  data: number[];
+export interface DataUnit {
+  value: number;
+  label: string;
+  color: string;
+}
+
+export interface PieChartProps {
+  data: DataUnit[];
 }
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
@@ -24,14 +31,12 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
       .append("g")
       .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    const pie = d3.pie<number>();
+    const pie = d3.pie<DataUnit>().value((d: any) => d.value);
 
     const arc = d3
-      .arc<d3.PieArcDatum<number>>()
+      .arc<d3.PieArcDatum<DataUnit>>()
       .innerRadius(0)
       .outerRadius(radius);
-
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     svg
       .selectAll(".arc")
@@ -41,17 +46,34 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
       .attr("class", "arc")
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d: any, i: any) => color(i));
+      .attr("fill", (d: any) => d.data.color);
 
     svg
       .selectAll(".arc")
       .append("text")
       .attr("transform", (d: any) => `translate(${arc.centroid(d)})`)
       .attr("class", "text")
-      .text((d: any) => d.data);
+      .attr("fill", "white")
+      .style("font-size", "16px")
+      .style("font-weight", "700")
+      .text((d: any) => `${d.data.value}%`);
   }, [data]);
 
-  return <svg ref={svgRef}></svg>;
+  return (
+    <Grid templateColumns="repeat(1, 1fr)" gap="1">
+      <GridItem colSpan={1}>
+        <svg ref={svgRef}></svg>
+      </GridItem>
+      <GridItem justifyContent={"center"} colSpan={4} display={"flex"}>
+          {data.map((v, index) => (
+            <Box key={index} alignItems={"center"} marginLeft={"20px"} display={"flex"}>
+              <Box backgroundColor={v.color} height={"10px"} width={"10px"}></Box>
+              <Box marginLeft={"10px"} display={"flex"}>{v.label}</Box>
+            </Box>
+          ))}
+      </GridItem>
+    </Grid>
+  );
 };
 
 export default PieChart;
