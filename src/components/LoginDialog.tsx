@@ -21,14 +21,11 @@ import { useUser } from "../hooks/useUser";
 import { User } from "../context/UserContextProvider";
 import { useEffect } from "react";
 import { MdClose, MdLogin } from "react-icons/md";
-import { FaComment } from "react-icons/fa";
 import { Alert } from "./ui/alert";
-import { ToggleTip } from "./ui/toggle-tip";
 
 export const LoginDialog = () => {
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<User>();
@@ -118,7 +115,6 @@ export const LoginDialog = () => {
             </Stack>
           </DialogBody>
           <DialogFooter>
-            <ToggleTip content="This is the tooltip content">
               <Button
                 onClick={handleSubmit(onSubmit)}
                 _focus={{ outline: "none" }}
@@ -132,7 +128,6 @@ export const LoginDialog = () => {
                 <MdLogin />
                 Login
               </Button>
-            </ToggleTip>
           </DialogFooter>
         </DialogContent>
       </DialogRoot>

@@ -1,4 +1,5 @@
 import {
+  Box,
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -11,6 +12,7 @@ import {
   HStack,
   IconButton,
   Stack,
+  Strong,
   Table,
   Textarea,
 } from "@chakra-ui/react";
@@ -29,17 +31,31 @@ import PieChart, { DataUnit } from "./charts/PieChart";
 import { Page } from "../context/FeedbackContextProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ColoredTableCell } from "./ColoredTableCell";
+import {
+  HoverCardArrow,
+  HoverCardContent,
+  HoverCardRoot,
+  HoverCardTrigger,
+} from "./ui/hover-card";
 
 export const FeedbackViewDialog = () => {
-
   const { menu, setMenu } = useMenu();
 
-  const [chart, setChart] = useState<DataUnit[]>([{
-    value: 100, label: "neutral",
-    color: "green"
-  }]);
+  const [chart, setChart] = useState<DataUnit[]>([
+    {
+      value: 100,
+      label: "neutral",
+      color: "green",
+    },
+  ]);
 
-  const { paginatedFeedback, fetchAll, fetchStatistics, statistics, fulfilled } = useFeedback();
+  const {
+    paginatedFeedback,
+    fetchAll,
+    fetchStatistics,
+    statistics,
+    fulfilled,
+  } = useFeedback();
 
   const [selectedRow, setSelectedRow] = useState<number | undefined>(undefined);
 
@@ -48,32 +64,33 @@ export const FeedbackViewDialog = () => {
   );
 
   useEffect(() => {
-    if (menu?.menu === MenuEnum.DASHBOARD) { 
-      fetchAll({ page: 1, pageSize: 10 }); fetchStatistics() 
-    };
+    if (menu?.menu === MenuEnum.DASHBOARD) {
+      fetchAll({ page: 1, pageSize: 10 });
+      fetchStatistics();
+    }
   }, [menu]);
 
   useEffect(() => {
-      if (statistics && fulfilled) {
-        setChart([
-          {
-            value: statistics.neutral,
-            label: "Natural",
-            color: "#558ff7"
-          },
-          {
-            value: statistics.negative,
-            label: "Negative",
-            color: "#f36455"
-          },
-          {
-            value: statistics.positive,
-            label: "Positive",
-            color: "#67bd71"
-          }
-        ])
-      }
-  }, [statistics, fulfilled])
+    if (statistics && fulfilled) {
+      setChart([
+        {
+          value: statistics.neutral,
+          label: "Natural",
+          color: "#558ff7",
+        },
+        {
+          value: statistics.negative,
+          label: "Negative",
+          color: "#f36455",
+        },
+        {
+          value: statistics.positive,
+          label: "Positive",
+          color: "#67bd71",
+        },
+      ]);
+    }
+  }, [statistics, fulfilled]);
 
   const onPageChange = (page: Page) => {
     fetchAll({ page: page.page, pageSize: page.pageSize });
@@ -81,13 +98,19 @@ export const FeedbackViewDialog = () => {
 
   const sentimentLabel = (num: number) => {
     if (num > 0) {
-      return <ColoredTableCell bgColor={"#67bd71"} color={"white"} label={num}/>
+      return (
+        <ColoredTableCell bgColor={"#67bd71"} color={"white"} label={num} />
+      );
     } else if (num < 0) {
-      return <ColoredTableCell bgColor={"#f36455"} color={"white"} label={num}/>
+      return (
+        <ColoredTableCell bgColor={"#f36455"} color={"white"} label={num} />
+      );
     } else {
-      return <ColoredTableCell bgColor={"#558ff7"} color={"white"} label={num}/>
+      return (
+        <ColoredTableCell bgColor={"#558ff7"} color={"white"} label={num} />
+      );
     }
-  }
+  };
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -128,23 +151,35 @@ export const FeedbackViewDialog = () => {
                               {sentimentLabel(item?.sentimentScore ?? 0)}
                             </Table.Cell>
                             <Table.Cell>
-                              <IconButton
-                                _focus={{ outline: "none" }}
-                                onClick={() => {
-                                  setSelectedRow(index);
-                                  setSelectedComment(item.comment);
-                                }}
-                                width={"24px"}
-                                height={"24px"}
-                                color={"#9c27b0"}
-                                opacity={0.9}
-                              >
-                                {selectedRow === index ? (
-                                  <FaEye />
-                                ) : (
-                                  <FaEyeSlash />
-                                )}
-                              </IconButton>
+                              <HoverCardRoot size="sm">
+                                <HoverCardTrigger asChild>
+                                  <IconButton
+                                    _focus={{ outline: "none" }}
+                                    onClick={() => {
+                                      setSelectedRow(index);
+                                      setSelectedComment(item.comment);
+                                    }}
+                                    width={"24px"}
+                                    height={"24px"}
+                                    color={"#9c27b0"}
+                                    opacity={0.9}
+                                  >
+                                    {selectedRow === index ? (
+                                      <FaEye />
+                                    ) : (
+                                      <FaEyeSlash />
+                                    )}
+                                  </IconButton>
+                                </HoverCardTrigger>
+                                <HoverCardContent maxWidth="240px">
+                                  <HoverCardArrow />
+                                  <Box>
+                                    <Strong>
+                                      Let see feedback
+                                    </Strong>
+                                  </Box>
+                                </HoverCardContent>
+                              </HoverCardRoot>
                             </Table.Cell>
                           </Table.Row>
                         ))}
