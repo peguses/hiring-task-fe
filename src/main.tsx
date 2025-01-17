@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")!).render(
         </AppContextProvider>
       </Theme>
     </ChakraProvider>
-  </StrictMode>
+    </StrictMode>
 );
 
 

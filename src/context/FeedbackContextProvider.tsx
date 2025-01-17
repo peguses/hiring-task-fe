@@ -8,15 +8,28 @@ export interface Feedback {
   sentimentScore?: number;
 }
 
+export interface PaginatedFeedback {
+  feedbacks?: Array<Feedback> | [];
+  page: number;
+  limit: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface Page {
+  page: number;
+  pageSize: number;
+}
+
 export interface FeedbackContextType {
   feedback?: Feedback | null;
-  feedbacks?: Array<Feedback> | [];
+  paginatedFeedback?: PaginatedFeedback;
   rejected?: boolean;
   pending?: boolean;
   fulfilled?: boolean;
   error?: string;
   submit: (user: Feedback) => void;
-  fetchAll: () => void;
+  fetchAll: (page?: Page) => void;
   clear: () => void;
 }
 
@@ -32,6 +45,8 @@ export const FeedbackContextProvider: React.FC<
   FeedbackContextProviderProps
 > = ({ children }) => {
   const [feedback, setFeedback] = useState<Feedback | undefined>(undefined);
+
+  const [paginatedFeedback, setPaginatedFeedback] = useState<PaginatedFeedback | undefined>(undefined);
 
   const [pending, setPending] = useState<boolean>(false);
 
@@ -63,15 +78,15 @@ export const FeedbackContextProvider: React.FC<
     }
   };
 
-  const fetchAll = async () => {
+  const fetchAll = async (page?: Page) => {
     setPending(true);
     setFulfilled(false);
     setRejected(false);
     setError(undefined);
 
     try {
-      const response = await fetchFeedbacks();
-      setFeedback(response.data);
+      const response = await fetchFeedbacks(page);
+      setPaginatedFeedback({...response.data, feedbacks: response.data.data})
       setFulfilled(true);
     } catch (err: any) {
       setRejected(true);
@@ -93,6 +108,7 @@ export const FeedbackContextProvider: React.FC<
     <FeedbackContext.Provider
       value={{
         feedback,
+        paginatedFeedback,
         submit,
         fetchAll,
         clear,
