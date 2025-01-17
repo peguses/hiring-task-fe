@@ -38,7 +38,7 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
   const [error, setError] = useState<string | undefined>(undefined);
 
   const submitLogin = async (data: User) => {
-    
+
     setPending(true);
     setFulfilled(false);
     setRejected(false);
@@ -46,20 +46,13 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
 
     try {
       const response = await requestLogin(data);
-      if (response?.data) {
-        setUser(response.data);
-        setFulfilled(true);
-      } else {
-        setFulfilled(false);
-        setRejected(true);
-        setError("Login failed");
-      }
+      setUser(response.data);
+      setFulfilled(true);
+      
     } catch (err: any) {
       setRejected(true);
       setError(
-        err?.response?.data?.errors?.length > 0
-          ? err?.response?.data?.errors[0]?.msg
-          : undefined
+        err?.response?.data?.message
       );
     } finally {
       setPending(false);

@@ -52,7 +52,7 @@ export interface FeedbackContextProviderProps {
 export const FeedbackContextProvider: React.FC<
   FeedbackContextProviderProps
 > = ({ children }) => {
-  
+
   const [feedback, setFeedback] = useState<Feedback | undefined>(undefined);
 
   const [paginatedFeedback, setPaginatedFeedback] = useState<PaginatedFeedback | undefined>(undefined);
@@ -77,8 +77,9 @@ export const FeedbackContextProvider: React.FC<
     try {
 
       const response = await submitFeedback(data);
-      setFeedback(response.data);
-      setFulfilled(true);
+      console.log(response)
+      // setFeedback(response.data);
+      // setFulfilled(true);
 
     } catch (err: any) {
       setRejected(true);
