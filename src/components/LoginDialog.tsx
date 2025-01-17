@@ -43,6 +43,7 @@ export const LoginDialog = () => {
       setMenu({ menu: MenuEnum.DASHBOARD });
     }
   }, [pending, fulfilled, rejected, error, setMenu]);
+  
 
   return (
     <HStack wrap="wrap" gap="4">

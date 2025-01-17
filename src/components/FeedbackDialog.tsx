@@ -33,7 +33,7 @@ export const FeedbackDialog = () => {
     formState: { errors },
   } = useForm<Feedback>();
 
-  const { submit, fulfilled, rejected, pending, error } = useFeedback();
+  const { submit, fulfilled, rejected, pending, error, clear } = useFeedback();
 
   const comment  = watch("comment", "");
 
@@ -61,6 +61,7 @@ export const FeedbackDialog = () => {
         motionPreset="slide-in-bottom"
         open={menu?.menu === MenuEnum.FEEDBACK_DIALOG}
         size={"xl"}
+        onExitComplete={() => clear()}
       >
         <DialogContent>
           <DialogHeader textAlignLast={"justify"}>

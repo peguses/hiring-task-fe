@@ -77,9 +77,8 @@ export const FeedbackContextProvider: React.FC<
     try {
 
       const response = await submitFeedback(data);
-      console.log(response)
-      // setFeedback(response.data);
-      // setFulfilled(true);
+      setFeedback(response.data);
+      setFulfilled(true);
 
     } catch (err: any) {
       setRejected(true);
