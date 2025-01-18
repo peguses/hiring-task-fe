@@ -4,7 +4,6 @@ import { Feedback, Page } from "../context/FeedbackContextProvider"
 import apiKit from "../helpers/axios-http-kit";
 
 export const submitFeedback = async (data: Feedback) :Promise<AxiosResponse<any>> => {
-    console.log(await apiKit.post(`/feedbacks`, {...data}));
     return await apiKit.post(`/feedbacks`, {...data})
 }
 

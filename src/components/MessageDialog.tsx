@@ -26,7 +26,7 @@ export const MessageDialog: React.FC<MessageDialogProps> = ({ message, open }) =
             placement={"center"}
             motionPreset="slide-in-bottom"
             open={open}
-            size={"xl"}
+            size={"lg"}
           >
             <DialogContent>
               <DialogBody>
