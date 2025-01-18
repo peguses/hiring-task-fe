@@ -1,9 +1,10 @@
 import {
+  Box,
     DialogBody,
     DialogContent,
     DialogFooter,
     DialogRoot,
-    HStack,
+    HStack
   } from "@chakra-ui/react";
   import { Button } from "./ui/button";
   import { FaComments } from 'react-icons/fa';
@@ -30,7 +31,7 @@ export const MessageDialog: React.FC<MessageDialogProps> = ({ message, open }) =
           >
             <DialogContent>
               <DialogBody>
-                <FaComments/> {message}
+                ,<Box display={"flex"}><FaComments/> <div style={{marginLeft: "10px"}}>{message}</div></Box>
               </DialogBody>
               <DialogFooter>
                 <Button
