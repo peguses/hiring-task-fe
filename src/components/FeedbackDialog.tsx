@@ -18,7 +18,7 @@ import { Field } from "./ui/field";
 import { Button } from "./ui/button";
 import { useFeedback } from "../hooks/useFeedback";
 import { Feedback } from "../context/FeedbackContextProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MenuEnum } from "../enums/menu.enum";
 import { useMenu } from "../hooks/useMenu";
 import { MdClose } from "react-icons/md";
@@ -40,6 +40,8 @@ export const FeedbackDialog = () => {
 
   const { menu, setMenu } = useMenu();
 
+  const [ successMessage, setSuccessMessage ] = useState<boolean>(false);
+
   useEffect(() => {
     if (fulfilled && !rejected) {
       reset({
@@ -47,6 +49,7 @@ export const FeedbackDialog = () => {
         customerName: "",
         comment: "",
       });
+      setSuccessMessage(true);
     }
   }, [fulfilled, reset, rejected]);
 
@@ -73,6 +76,7 @@ export const FeedbackDialog = () => {
                 width={"24px"}
                 onClick={() => {
                   setMenu({ menu: undefined });
+                  setSuccessMessage(false);
                 }}
                 _focus={{ outline: "none" }}
                 backgroundColor={"#9c27b0"}
@@ -85,6 +89,12 @@ export const FeedbackDialog = () => {
             </Box>
           </DialogHeader>
           <DialogBody>
+            {successMessage && (<Alert
+                marginTop={"10px"}
+                status="success"
+                title="Thanks you for your valuable feedback"
+                marginBottom={"10px"}
+              />)}
             {rejected && (
               <Alert
                 marginTop={"10px"}
